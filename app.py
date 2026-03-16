@@ -163,6 +163,8 @@ def dashboard():
 def simulado(concurso_id):
     concurso = Concurso.query.get_or_404(concurso_id)
     questoes_simulado = []
+    questoes_ids = []  # Guardar apenas IDs
+    
     for materia in Materia.query.filter_by(concurso_id=concurso_id).all():
         qs = Questao.query.filter_by(materia_id=materia.id).all()
         for q in random.sample(qs, min(15, len(qs))):
@@ -172,8 +174,11 @@ def simulado(concurso_id):
                 'alternativas': {'A': q.alternativa_a, 'B': q.alternativa_b,
                                  'C': q.alternativa_c, 'D': q.alternativa_d, 'E': q.alternativa_e}
             })
+            questoes_ids.append(q.id)
+    
     random.shuffle(questoes_simulado)
-    session['questoes_simulado'] = questoes_simulado
+    # Guardar apenas os IDs na sessão (mais leve)
+    session['questoes_ids'] = questoes_ids
     session['concurso_id'] = concurso_id
     return render_template('simulado.html', concurso=concurso,
                            questoes=questoes_simulado, total=len(questoes_simulado))
@@ -183,44 +188,77 @@ def simulado(concurso_id):
 def finalizar():
     try:
         data = request.get_json()
-        respostas, tempo = data.get('respostas', {}), data.get('tempo', 0)
-        questoes = session.get('questoes_simulado', [])
+        respostas = data.get('respostas', {})
+        tempo = data.get('tempo', 0)
+        
+        # Buscar questões pelos IDs salvos
+        questoes_ids = session.get('questoes_ids', [])
         
         print(f"\n=== FINALIZANDO SIMULADO ===")
         print(f"Respostas recebidas: {len(respostas)}")
-        print(f"Questões na sessão: {len(questoes)}")
+        print(f"Questões IDs na sessão: {len(questoes_ids)}")
         print(f"Tempo: {tempo}s")
         
-        acertos_total, por_materia = 0, {}
-
-        for q in questoes:
-            qid, mat, mat_id = str(q['id']), q['materia'], q['materia_id']
+        if not questoes_ids:
+            print("ERRO: Nenhuma questão na sessão!")
+            return jsonify({
+                'erro': 'Sessão expirada. Recarregue a página e tente novamente.',
+                'nota': 0, 'acertos': 0, 'total': 0,
+                'nivel_cls': 'danger', 'nivel_msg': 'Erro: sessão expirada',
+                'por_materia': {}, 'tempo': tempo
+            }), 400
+        
+        acertos_total = 0
+        por_materia = {}
+        total = len(questoes_ids)
+        
+        # Processar cada questão
+        for qid in questoes_ids:
+            q = Questao.query.get(qid)
+            if not q:
+                continue
+                
+            mat = q.materia.nome
+            mat_id = q.materia_id
+            
             if mat not in por_materia:
                 por_materia[mat] = {'materia_id': mat_id, 'acertos': 0, 'total': 0}
+            
             por_materia[mat]['total'] += 1
-            qdb = Questao.query.get(q['id'])
-            if qdb:
-                resposta_usuario = respostas.get(qid)
-                resposta_correta = qdb.resposta_correta
-                if resposta_usuario == resposta_correta:
-                    acertos_total += 1
-                    por_materia[mat]['acertos'] += 1
-
-        total = len(questoes)
-        nota = round((acertos_total / total) * 100, 1) if total else 0
+            
+            # Verificar resposta
+            resposta_usuario = respostas.get(str(qid))
+            if resposta_usuario == q.resposta_correta:
+                acertos_total += 1
+                por_materia[mat]['acertos'] += 1
+        
+        nota = round((acertos_total / total) * 100, 1) if total > 0 else 0
         nivel_cls, nivel_msg = nivel_aptidao(nota)
         
         print(f"Nota calculada: {nota}%")
         print(f"Acertos: {acertos_total}/{total}")
         print(f"Por matéria: {por_materia}")
-
-        desemp = Desempenho(usuario_id=session['usuario_id'], concurso_id=session.get('concurso_id'),
-                            nota_total=nota, total_questoes=total, acertos=acertos_total, tempo_gasto=tempo)
+        
+        # Salvar no banco
+        desemp = Desempenho(
+            usuario_id=session['usuario_id'],
+            concurso_id=session.get('concurso_id'),
+            nota_total=nota,
+            total_questoes=total,
+            acertos=acertos_total,
+            tempo_gasto=tempo
+        )
         db.session.add(desemp)
         db.session.flush()
+        
         for mat_nome, info in por_materia.items():
-            db.session.add(DesempenhoMateria(desempenho_id=desemp.id, materia_id=info['materia_id'],
-                                             acertos=info['acertos'], total=info['total']))
+            db.session.add(DesempenhoMateria(
+                desempenho_id=desemp.id,
+                materia_id=info['materia_id'],
+                acertos=info['acertos'],
+                total=info['total']
+            ))
+        
         db.session.commit()
         
         resultado = {
@@ -237,11 +275,17 @@ def finalizar():
         print("=== FIM ===")
         
         return jsonify(resultado)
+        
     except Exception as e:
         print(f"ERRO ao finalizar: {e}")
         import traceback
         traceback.print_exc()
-        return jsonify({'erro': str(e)}), 500
+        return jsonify({
+            'erro': str(e),
+            'nota': 0, 'acertos': 0, 'total': 0,
+            'nivel_cls': 'danger', 'nivel_msg': 'Erro ao processar',
+            'por_materia': {}, 'tempo': 0
+        }), 500
 
 @app.route('/historico')
 @login_required
