@@ -234,7 +234,7 @@ def finalizar():
                 'nota': 0, 'acertos': 0, 'total': 0,
                 'nivel_cls': 'danger',
                 'nivel_msg': 'Erro: simulado não encontrado',
-                'por_materia': {}, 'tempo': tempo
+                'por_materia': {}, 'tempo': tempo, 'gabarito': []
             })
         
         questoes_ids = json.loads(simulado_andamento.questoes_ids)
@@ -245,10 +245,11 @@ def finalizar():
         
         acertos_total = 0
         por_materia = {}
+        gabarito = []  # Lista com todas as questões e respostas
         total = len(questoes_ids)
         
         # Processar cada questão
-        for qid in questoes_ids:
+        for idx, qid in enumerate(questoes_ids, 1):
             q = Questao.query.get(qid)
             if not q:
                 print(f"Questão {qid} não encontrada")
@@ -264,9 +265,28 @@ def finalizar():
             
             # Verificar resposta
             resposta_usuario = respostas.get(str(qid))
-            if resposta_usuario == q.resposta_correta:
+            acertou = resposta_usuario == q.resposta_correta
+            
+            if acertou:
                 acertos_total += 1
                 por_materia[mat]['acertos'] += 1
+            
+            # Adicionar ao gabarito
+            gabarito.append({
+                'numero': idx,
+                'enunciado': q.enunciado,
+                'materia': mat,
+                'alternativas': {
+                    'A': q.alternativa_a,
+                    'B': q.alternativa_b,
+                    'C': q.alternativa_c,
+                    'D': q.alternativa_d,
+                    'E': q.alternativa_e
+                },
+                'resposta_usuario': resposta_usuario,
+                'resposta_correta': q.resposta_correta,
+                'acertou': acertou
+            })
         
         nota = round((acertos_total / total) * 100, 1) if total > 0 else 0
         nivel_cls, nivel_msg = nivel_aptidao(nota)
@@ -306,10 +326,11 @@ def finalizar():
             'nivel_cls': nivel_cls,
             'nivel_msg': nivel_msg,
             'por_materia': por_materia,
-            'tempo': tempo
+            'tempo': tempo,
+            'gabarito': gabarito
         }
         
-        print(f"Retornando: {resultado}")
+        print(f"Retornando resultado com {len(gabarito)} questões no gabarito")
         print("=== FIM ===")
         
         return jsonify(resultado)
@@ -323,7 +344,7 @@ def finalizar():
             'nota': 0, 'acertos': 0, 'total': 0,
             'nivel_cls': 'danger',
             'nivel_msg': f'Erro: {str(e)}',
-            'por_materia': {}, 'tempo': 0
+            'por_materia': {}, 'tempo': 0, 'gabarito': []
         })
 
 @app.route('/historico')

@@ -117,7 +117,6 @@ function exibirResultado(data) {
   console.log('=== EXIBINDO RESULTADO ===' );
   console.log('Data completa:', JSON.stringify(data, null, 2));
   
-  // Validar dados
   if (!data) {
     alert('Erro: Nenhum dado recebido do servidor!');
     return;
@@ -129,18 +128,13 @@ function exibirResultado(data) {
   const acertos = parseInt(data.acertos) || 0;
   const total = parseInt(data.total) || 0;
   
-  console.log('Nota:', nota);
-  console.log('Acertos:', acertos);
-  console.log('Total:', total);
-  
-  // Definir cor baseada na nota
-  let corNota = '#dc3545'; // vermelho
+  let corNota = '#dc3545';
   let corTexto = 'danger';
   if (nota >= 70) {
-    corNota = '#28a745'; // verde
+    corNota = '#28a745';
     corTexto = 'success';
   } else if (nota >= 50) {
-    corNota = '#ffc107'; // amarelo
+    corNota = '#ffc107';
     corTexto = 'warning';
   }
   
@@ -161,10 +155,9 @@ function exibirResultado(data) {
     </div>
     <hr class="my-4">
     <h5 class="mb-3 text-center">📊 Desempenho por Matéria</h5>
-    <div class="row g-3">`;
+    <div class="row g-3 mb-4">`;
   
   const materias = data.por_materia || {};
-  console.log('Matérias:', materias);
   
   if (Object.keys(materias).length === 0) {
     html += '<div class="col-12"><p class="text-center text-muted">Nenhuma matéria encontrada</p></div>';
@@ -196,6 +189,70 @@ function exibirResultado(data) {
   }
   
   html += '</div>';
+  
+  // GABARITO DETALHADO
+  const gabarito = data.gabarito || [];
+  if (gabarito.length > 0) {
+    html += `
+      <hr class="my-4">
+      <h5 class="mb-3 text-center">
+        <i class="fas fa-list-check me-2"></i>Gabarito Completo
+      </h5>
+      <div class="accordion" id="accordionGabarito">`;
+    
+    gabarito.forEach((q, idx) => {
+      const corCard = q.acertou ? 'success' : 'danger';
+      const icone = q.acertou ? 'check-circle' : 'times-circle';
+      
+      html += `
+        <div class="accordion-item border-${corCard} mb-2">
+          <h2 class="accordion-header">
+            <button class="accordion-button collapsed bg-light" type="button" data-bs-toggle="collapse" data-bs-target="#gabarito${idx}">
+              <i class="fas fa-${icone} text-${corCard} me-2"></i>
+              <strong>Questão ${q.numero}</strong>
+              <span class="badge bg-secondary ms-2">${q.materia}</span>
+              ${q.acertou ? '<span class="badge bg-success ms-2">Acertou</span>' : '<span class="badge bg-danger ms-2">Errou</span>'}
+            </button>
+          </h2>
+          <div id="gabarito${idx}" class="accordion-collapse collapse" data-bs-parent="#accordionGabarito">
+            <div class="accordion-body">
+              <p class="fw-semibold mb-3">${q.enunciado}</p>
+              <div class="list-group">`;
+      
+      ['A', 'B', 'C', 'D', 'E'].forEach(letra => {
+        const texto = q.alternativas[letra];
+        const isCorreta = letra === q.resposta_correta;
+        const isUsuario = letra === q.resposta_usuario;
+        
+        let classe = 'list-group-item';
+        let iconeAlt = '';
+        
+        if (isCorreta) {
+          classe += ' list-group-item-success';
+          iconeAlt = '<i class="fas fa-check-circle text-success me-2"></i>';
+        } else if (isUsuario && !isCorreta) {
+          classe += ' list-group-item-danger';
+          iconeAlt = '<i class="fas fa-times-circle text-danger me-2"></i>';
+        }
+        
+        html += `
+          <div class="${classe}">
+            ${iconeAlt}<strong>${letra})</strong> ${texto}
+            ${isCorreta ? '<span class="badge bg-success float-end">Correta</span>' : ''}
+            ${isUsuario && !isCorreta ? '<span class="badge bg-danger float-end">Sua resposta</span>' : ''}
+          </div>`;
+      });
+      
+      html += `
+              </div>
+              ${!q.resposta_usuario ? '<p class="text-muted mt-2 mb-0"><i class="fas fa-info-circle me-1"></i>Você não respondeu esta questão</p>' : ''}
+            </div>
+          </div>
+        </div>`;
+    });
+    
+    html += '</div>';
+  }
   
   console.log('HTML gerado, abrindo modal...');
   document.getElementById('conteudoResultado').innerHTML = html;
