@@ -90,71 +90,118 @@ function confirmarEnvio() {
     if (!confirm(`Você deixou ${naoRespondidas} questão(ões) sem resposta. Deseja finalizar mesmo assim?`)) return;
   }
   clearInterval(timerInterval);
+  
+  console.log('Enviando respostas:', respostas);
+  console.log('Tempo:', segundos);
+  
   fetch('/finalizar', {
     method: 'POST',
     headers: {'Content-Type': 'application/json'},
     body: JSON.stringify({respostas, tempo: segundos})
   })
-  .then(r => r.json())
-  .then(data => exibirResultado(data));
+  .then(r => {
+    console.log('Status da resposta:', r.status);
+    return r.json();
+  })
+  .then(data => {
+    console.log('Dados recebidos do servidor:', data);
+    exibirResultado(data);
+  })
+  .catch(error => {
+    console.error('Erro ao finalizar:', error);
+    alert('Erro ao processar o simulado. Verifique o console (F12).');
+  });
 }
 
 function exibirResultado(data) {
-  console.log('Dados recebidos:', data); // Debug
+  console.log('=== EXIBINDO RESULTADO ===' );
+  console.log('Data completa:', JSON.stringify(data, null, 2));
   
-  const minutos = Math.floor(data.tempo / 60);
-  const segs = data.tempo % 60;
+  // Validar dados
+  if (!data) {
+    alert('Erro: Nenhum dado recebido do servidor!');
+    return;
+  }
+  
+  const minutos = Math.floor((data.tempo || 0) / 60);
+  const segs = (data.tempo || 0) % 60;
   const nota = parseFloat(data.nota) || 0;
   const acertos = parseInt(data.acertos) || 0;
   const total = parseInt(data.total) || 0;
   
+  console.log('Nota:', nota);
+  console.log('Acertos:', acertos);
+  console.log('Total:', total);
+  
   // Definir cor baseada na nota
-  let corNota = 'danger';
-  if (nota >= 70) corNota = 'success';
-  else if (nota >= 50) corNota = 'warning';
+  let corNota = '#dc3545'; // vermelho
+  let corTexto = 'danger';
+  if (nota >= 70) {
+    corNota = '#28a745'; // verde
+    corTexto = 'success';
+  } else if (nota >= 50) {
+    corNota = '#ffc107'; // amarelo
+    corTexto = 'warning';
+  }
   
   let html = `
     <div class="text-center mb-4">
-      <div class="display-1 fw-bold" style="color: ${corNota === 'success' ? '#28a745' : corNota === 'warning' ? '#ffc107' : '#dc3545'}">
+      <div class="display-1 fw-bold mb-3" style="color: ${corNota}; font-size: 5rem;">
         ${nota.toFixed(1)}%
       </div>
-      <p class="fs-4 mt-3">${acertos} de ${total} acertos</p>
-      <div class="alert alert-${corNota} mt-3">
+      <p class="fs-3 mb-3">
+        <strong>${acertos}</strong> acertos de <strong>${total}</strong> questões
+      </p>
+      <div class="alert alert-${corTexto} fs-5">
         <strong>${data.nivel_msg || 'Simulado finalizado!'}</strong>
       </div>
-      <p class="text-muted fs-5"><i class="fas fa-clock me-2"></i>Tempo: ${minutos}min ${segs}s</p>
+      <p class="text-muted fs-5">
+        <i class="fas fa-clock me-2"></i>Tempo total: ${minutos} minutos e ${segs} segundos
+      </p>
     </div>
-    <hr>
+    <hr class="my-4">
     <h5 class="mb-3 text-center">📊 Desempenho por Matéria</h5>
     <div class="row g-3">`;
   
-  for (const [mat, info] of Object.entries(data.por_materia || {})) {
-    const pct = Math.round((info.acertos / info.total) * 100);
-    let cor = 'danger';
-    if (pct >= 70) cor = 'success';
-    else if (pct >= 50) cor = 'warning';
-    
-    html += `
-      <div class="col-md-6">
-        <div class="card border-${cor} shadow-sm">
-          <div class="card-body">
-            <div class="d-flex justify-content-between align-items-center mb-2">
-              <span class="fw-bold">${mat}</span>
-              <span class="badge bg-${cor} fs-6">${pct}%</span>
-            </div>
-            <div class="d-flex justify-content-between text-muted small mb-2">
-              <span>Acertos: ${info.acertos}/${info.total}</span>
-            </div>
-            <div class="progress" style="height:8px">
-              <div class="progress-bar bg-${cor}" style="width:${pct}%"></div>
+  const materias = data.por_materia || {};
+  console.log('Matérias:', materias);
+  
+  if (Object.keys(materias).length === 0) {
+    html += '<div class="col-12"><p class="text-center text-muted">Nenhuma matéria encontrada</p></div>';
+  } else {
+    for (const [mat, info] of Object.entries(materias)) {
+      const pct = Math.round((info.acertos / info.total) * 100);
+      let cor = 'danger';
+      if (pct >= 70) cor = 'success';
+      else if (pct >= 50) cor = 'warning';
+      
+      html += `
+        <div class="col-md-6">
+          <div class="card border-${cor} shadow-sm h-100">
+            <div class="card-body">
+              <div class="d-flex justify-content-between align-items-center mb-2">
+                <span class="fw-bold fs-6">${mat}</span>
+                <span class="badge bg-${cor} fs-6">${pct}%</span>
+              </div>
+              <div class="d-flex justify-content-between text-muted small mb-2">
+                <span>Acertos: <strong>${info.acertos}/${info.total}</strong></span>
+              </div>
+              <div class="progress" style="height:10px">
+                <div class="progress-bar bg-${cor}" style="width:${pct}%"></div>
+              </div>
             </div>
           </div>
-        </div>
-      </div>`;
+        </div>`;
+    }
   }
+  
   html += '</div>';
+  
+  console.log('HTML gerado, abrindo modal...');
   document.getElementById('conteudoResultado').innerHTML = html;
-  new bootstrap.Modal(document.getElementById('modalResultado')).show();
+  const modal = new bootstrap.Modal(document.getElementById('modalResultado'));
+  modal.show();
+  console.log('Modal aberto!');
 }
 </script>
 {% endblock %}
