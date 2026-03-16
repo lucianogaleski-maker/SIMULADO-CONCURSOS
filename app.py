@@ -330,14 +330,19 @@ def finalizar():
 @login_required
 def historico():
     try:
-        registros = Desempenho.query.filter_by(usuario_id=session['usuario_id'])\
-            .order_by(Desempenho.data.desc()).all()
-        return render_template('historico.html', registros=registros)
+        # Buscar registros com join explícito para evitar lazy loading
+        registros = db.session.query(Desempenho).join(Concurso).filter(
+            Desempenho.usuario_id == session['usuario_id']
+        ).order_by(Desempenho.data.desc()).all()
+        
+        print(f"Histórico: {len(registros)} registros encontrados")
+        return render_template('historico.html', registros=registros, erro=None)
     except Exception as e:
-        print(f"Erro no histórico: {e}")
+        print(f"ERRO no histórico: {e}")
         import traceback
         traceback.print_exc()
-        return render_template('historico.html', registros=[], erro=str(e))
+        # Retornar página vazia com mensagem de erro
+        return render_template('historico.html', registros=[], erro='Erro ao carregar histórico. Tente novamente.')
 
 @app.route('/relatorio-admin')
 @admin_required

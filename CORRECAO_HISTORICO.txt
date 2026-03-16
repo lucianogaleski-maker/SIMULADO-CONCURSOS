@@ -1,0 +1,39 @@
+# 🔧 CORREÇÃO DO HISTÓRICO
+
+## Arquivos atualizados:
+
+1. **app.py** - Query melhorada com join explícito
+2. **templates/historico.html** - Proteções para todos os campos
+
+---
+
+## 🚀 SUBA PARA O GITHUB:
+
+### **1. app.py:**
+- Edite no GitHub
+- Cole o conteúdo novo
+- Commit
+
+### **2. templates/historico.html:**
+- Edite no GitHub
+- Cole o conteúdo novo
+- Commit
+
+---
+
+## ✅ Aguarde 2-3 minutos
+
+O Render vai fazer deploy automaticamente.
+
+---
+
+## 🧪 Teste depois:
+
+1. Acesse o site
+2. Faça login
+3. Clique em "Histórico"
+4. Deve mostrar seus simulados ou "Você ainda não realizou nenhum simulado"
+
+---
+
+Se ainda der erro, me avise!

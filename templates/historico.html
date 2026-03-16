@@ -5,11 +5,12 @@
 
 {% if erro %}
 <div class="alert alert-danger">
-  <strong>Erro:</strong> {{ erro }}
+  <i class="fas fa-exclamation-triangle me-2"></i>{{ erro }}
+  <br><small>Se o problema persistir, contate o administrador.</small>
 </div>
 {% endif %}
 
-{% if registros %}
+{% if registros and registros|length > 0 %}
 <div class="table-responsive">
   <table class="table table-hover">
     <thead class="table-primary">
@@ -17,23 +18,52 @@
     </thead>
     <tbody>
       {% for r in registros %}
+      {% if r %}
       <tr>
-        <td>{{ r.concurso.nome if r.concurso else 'Concurso removido' }}</td>
         <td>
-          <span class="badge {% if r.nota_total >= 70 %}bg-success{% elif r.nota_total >= 50 %}bg-warning text-dark{% else %}bg-danger{% endif %} fs-6">
-            {{ r.nota_total }}%
-          </span>
+          {% if r.concurso %}
+            {{ r.concurso.nome }}
+          {% else %}
+            <span class="text-muted">Concurso não disponível</span>
+          {% endif %}
         </td>
-        <td>{{ r.acertos }}/{{ r.total_questoes }}</td>
-        <td>{{ (r.tempo_gasto // 60) }}min {{ (r.tempo_gasto % 60) }}s</td>
-        <td>{{ r.data.strftime('%d/%m/%Y %H:%M') }}</td>
+        <td>
+          {% if r.nota_total is not none %}
+          <span class="badge {% if r.nota_total >= 70 %}bg-success{% elif r.nota_total >= 50 %}bg-warning text-dark{% else %}bg-danger{% endif %} fs-6">
+            {{ "%.1f"|format(r.nota_total) }}%
+          </span>
+          {% else %}
+          <span class="text-muted">-</span>
+          {% endif %}
+        </td>
+        <td>{{ r.acertos|default(0) }}/{{ r.total_questoes|default(0) }}</td>
+        <td>
+          {% if r.tempo_gasto %}
+            {{ (r.tempo_gasto // 60) }}min {{ (r.tempo_gasto % 60) }}s
+          {% else %}
+            -
+          {% endif %}
+        </td>
+        <td>
+          {% if r.data %}
+            {{ r.data.strftime('%d/%m/%Y %H:%M') }}
+          {% else %}
+            -
+          {% endif %}
+        </td>
       </tr>
+      {% endif %}
       {% endfor %}
     </tbody>
   </table>
 </div>
 {% else %}
-<div class="alert alert-info">Você ainda não realizou nenhum simulado.</div>
+<div class="alert alert-info">
+  <i class="fas fa-info-circle me-2"></i>Você ainda não realizou nenhum simulado.
+</div>
 {% endif %}
-<a href="{{ url_for('dashboard') }}" class="btn btn-primary">Voltar</a>
+
+<a href="{{ url_for('dashboard') }}" class="btn btn-primary">
+  <i class="fas fa-arrow-left me-2"></i>Voltar ao Início
+</a>
 {% endblock %}
