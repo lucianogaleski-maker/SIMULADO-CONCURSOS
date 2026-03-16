@@ -329,9 +329,15 @@ def finalizar():
 @app.route('/historico')
 @login_required
 def historico():
-    registros = Desempenho.query.filter_by(usuario_id=session['usuario_id'])\
-        .order_by(Desempenho.data.desc()).all()
-    return render_template('historico.html', registros=registros)
+    try:
+        registros = Desempenho.query.filter_by(usuario_id=session['usuario_id'])\
+            .order_by(Desempenho.data.desc()).all()
+        return render_template('historico.html', registros=registros)
+    except Exception as e:
+        print(f"Erro no histórico: {e}")
+        import traceback
+        traceback.print_exc()
+        return render_template('historico.html', registros=[], erro=str(e))
 
 @app.route('/relatorio-admin')
 @admin_required

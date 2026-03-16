@@ -2,6 +2,13 @@
 {% block title %}Histórico{% endblock %}
 {% block content %}
 <h4 class="mb-4"><i class="fas fa-history me-2"></i>Meu Histórico</h4>
+
+{% if erro %}
+<div class="alert alert-danger">
+  <strong>Erro:</strong> {{ erro }}
+</div>
+{% endif %}
+
 {% if registros %}
 <div class="table-responsive">
   <table class="table table-hover">
@@ -11,7 +18,7 @@
     <tbody>
       {% for r in registros %}
       <tr>
-        <td>{{ r.concurso.nome }}</td>
+        <td>{{ r.concurso.nome if r.concurso else 'Concurso removido' }}</td>
         <td>
           <span class="badge {% if r.nota_total >= 70 %}bg-success{% elif r.nota_total >= 50 %}bg-warning text-dark{% else %}bg-danger{% endif %} fs-6">
             {{ r.nota_total }}%
