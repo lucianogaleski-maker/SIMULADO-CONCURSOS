@@ -1,0 +1,38 @@
+# 📦 LISTA DE ARQUIVOS PARA UPLOAD NO PYTHONANYWHERE
+
+## ✅ Copie estes arquivos da pasta C:\simulado_concursos
+
+### 📄 Raiz (pasta principal):
+- app.py
+- requirements.txt
+
+### 📁 templates/ (criar esta pasta primeiro):
+- base.html
+- login.html
+- cadastro.html
+- dashboard.html
+- simulado.html
+- historico.html
+
+### 📁 static/css/ (criar static, depois css dentro):
+- style.css
+
+### 📁 data/ (criar esta pasta):
+- questoes.json
+
+---
+
+## 🎯 RESUMO RÁPIDO:
+
+1. Entre em https://www.pythonanywhere.com
+2. Crie conta gratuita
+3. Vá em "Files"
+4. Crie as pastas: templates, static, static/css, data
+5. Faça upload dos arquivos em cada pasta
+6. Vá em "Web" → "Add new web app" → Flask → Python 3.10
+7. Configure o WSGI (instruções no DEPLOY_PYTHONANYWHERE.md)
+8. Instale dependências no console Bash
+9. Clique em "Reload"
+10. Acesse seu site!
+
+Seu site ficará em: https://SEU_USUARIO.pythonanywhere.com
