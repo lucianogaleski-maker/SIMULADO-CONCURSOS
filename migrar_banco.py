@@ -29,6 +29,20 @@ CREATE TABLE IF NOT EXISTS acesso (
 ''')
 print("Tabela 'acesso' criada")
 
+# Criar tabela de simulados em andamento
+cursor.execute('''
+CREATE TABLE IF NOT EXISTS simulado_em_andamento (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    usuario_id INTEGER NOT NULL,
+    concurso_id INTEGER NOT NULL,
+    questoes_ids TEXT NOT NULL,
+    criado_em TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (usuario_id) REFERENCES usuario(id),
+    FOREIGN KEY (concurso_id) REFERENCES concurso(id)
+)
+''')
+print("Tabela 'simulado_em_andamento' criada")
+
 conn.commit()
 conn.close()
 print("\nBanco atualizado com sucesso!")

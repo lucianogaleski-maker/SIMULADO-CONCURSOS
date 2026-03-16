@@ -78,6 +78,15 @@ class Acesso(db.Model):
     usuario_id = db.Column(db.Integer, db.ForeignKey('usuario.id'), nullable=True)
     usuario = db.relationship('Usuario', backref='acessos')
 
+class SimuladoEmAndamento(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    usuario_id = db.Column(db.Integer, db.ForeignKey('usuario.id'))
+    concurso_id = db.Column(db.Integer, db.ForeignKey('concurso.id'))
+    questoes_ids = db.Column(db.Text)  # JSON com IDs das questões
+    criado_em = db.Column(db.DateTime, default=datetime.utcnow)
+    usuario = db.relationship('Usuario')
+    concurso = db.relationship('Concurso')
+
 # ── HELPERS ───────────────────────────────────────────────────────────────────
 def login_required(f):
     @wraps(f)
@@ -163,7 +172,7 @@ def dashboard():
 def simulado(concurso_id):
     concurso = Concurso.query.get_or_404(concurso_id)
     questoes_simulado = []
-    questoes_ids = []  # Guardar apenas IDs
+    questoes_ids = []
     
     for materia in Materia.query.filter_by(concurso_id=concurso_id).all():
         qs = Questao.query.filter_by(materia_id=materia.id).all()
@@ -177,9 +186,26 @@ def simulado(concurso_id):
             questoes_ids.append(q.id)
     
     random.shuffle(questoes_simulado)
-    # Guardar apenas os IDs na sessão (mais leve)
-    session['questoes_ids'] = questoes_ids
-    session['concurso_id'] = concurso_id
+    
+    # Salvar no banco ao invés da sessão
+    simulado_andamento = SimuladoEmAndamento.query.filter_by(
+        usuario_id=session['usuario_id']
+    ).first()
+    
+    if simulado_andamento:
+        simulado_andamento.concurso_id = concurso_id
+        simulado_andamento.questoes_ids = json.dumps(questoes_ids)
+        simulado_andamento.criado_em = datetime.utcnow()
+    else:
+        simulado_andamento = SimuladoEmAndamento(
+            usuario_id=session['usuario_id'],
+            concurso_id=concurso_id,
+            questoes_ids=json.dumps(questoes_ids)
+        )
+        db.session.add(simulado_andamento)
+    
+    db.session.commit()
+    
     return render_template('simulado.html', concurso=concurso,
                            questoes=questoes_simulado, total=len(questoes_simulado))
 
@@ -191,22 +217,31 @@ def finalizar():
         respostas = data.get('respostas', {})
         tempo = data.get('tempo', 0)
         
-        # Buscar questões pelos IDs salvos
-        questoes_ids = session.get('questoes_ids', [])
+        # Buscar simulado em andamento do banco
+        simulado_andamento = SimuladoEmAndamento.query.filter_by(
+            usuario_id=session['usuario_id']
+        ).first()
         
         print(f"\n=== FINALIZANDO SIMULADO ===")
+        print(f"Usuário ID: {session['usuario_id']}")
         print(f"Respostas recebidas: {len(respostas)}")
-        print(f"Questões IDs na sessão: {len(questoes_ids)}")
-        print(f"Tempo: {tempo}s")
+        print(f"Simulado em andamento encontrado: {simulado_andamento is not None}")
         
-        if not questoes_ids:
-            print("ERRO: Nenhuma questão na sessão!")
+        if not simulado_andamento:
+            print("ERRO: Nenhum simulado em andamento encontrado!")
             return jsonify({
-                'erro': 'Sessão expirada. Recarregue a página e tente novamente.',
+                'erro': 'Simulado não encontrado. Recarregue a página.',
                 'nota': 0, 'acertos': 0, 'total': 0,
-                'nivel_cls': 'danger', 'nivel_msg': 'Erro: sessão expirada',
+                'nivel_cls': 'danger',
+                'nivel_msg': 'Erro: simulado não encontrado',
                 'por_materia': {}, 'tempo': tempo
-            }), 400
+            })
+        
+        questoes_ids = json.loads(simulado_andamento.questoes_ids)
+        concurso_id = simulado_andamento.concurso_id
+        
+        print(f"Questões IDs: {len(questoes_ids)}")
+        print(f"Tempo: {tempo}s")
         
         acertos_total = 0
         por_materia = {}
@@ -216,6 +251,7 @@ def finalizar():
         for qid in questoes_ids:
             q = Questao.query.get(qid)
             if not q:
+                print(f"Questão {qid} não encontrada")
                 continue
                 
             mat = q.materia.nome
@@ -239,10 +275,10 @@ def finalizar():
         print(f"Acertos: {acertos_total}/{total}")
         print(f"Por matéria: {por_materia}")
         
-        # Salvar no banco
+        # Salvar desempenho
         desemp = Desempenho(
             usuario_id=session['usuario_id'],
-            concurso_id=session.get('concurso_id'),
+            concurso_id=concurso_id,
             nota_total=nota,
             total_questoes=total,
             acertos=acertos_total,
@@ -259,6 +295,8 @@ def finalizar():
                 total=info['total']
             ))
         
+        # Deletar simulado em andamento
+        db.session.delete(simulado_andamento)
         db.session.commit()
         
         resultado = {
@@ -283,9 +321,10 @@ def finalizar():
         return jsonify({
             'erro': str(e),
             'nota': 0, 'acertos': 0, 'total': 0,
-            'nivel_cls': 'danger', 'nivel_msg': 'Erro ao processar',
+            'nivel_cls': 'danger',
+            'nivel_msg': f'Erro: {str(e)}',
             'por_materia': {}, 'tempo': 0
-        }), 500
+        })
 
 @app.route('/historico')
 @login_required
