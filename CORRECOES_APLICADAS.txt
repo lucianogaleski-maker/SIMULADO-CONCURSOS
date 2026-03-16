@@ -1,0 +1,41 @@
+# ✅ CORREÇÕES APLICADAS
+
+## 🎨 Sistema de Cores Implementado:
+
+### Critério de Notas:
+- 🔴 **Vermelho (Ruim)**: Nota < 50%
+- 🟡 **Amarelo (Médio)**: Nota entre 50% e 69%
+- 🟢 **Verde (Bom)**: Nota >= 70%
+
+### Onde as cores aparecem:
+1. ✅ Modal de resultado final (nota grande)
+2. ✅ Desempenho por matéria
+3. ✅ Dashboard (últimos 5 simulados)
+4. ✅ Histórico completo
+
+## 🐛 Correções de Bugs:
+
+1. ✅ Adicionado debug no console (F12) para ver dados recebidos
+2. ✅ Melhorada exibição da nota (display-1, maior e mais visível)
+3. ✅ Tratamento de valores nulos/undefined
+4. ✅ Formatação correta da porcentagem (1 casa decimal)
+
+## 📤 Para atualizar no site:
+
+1. Suba os arquivos atualizados para o GitHub:
+   - templates/simulado.html
+   - templates/dashboard.html
+   - templates/historico.html
+
+2. O Render vai atualizar automaticamente em 2-3 minutos
+
+## 🧪 Como testar:
+
+1. Faça um simulado completo
+2. Ao finalizar, abra o Console do navegador (F12)
+3. Veja se aparece "Dados recebidos: {nota: X, acertos: Y...}"
+4. A nota deve aparecer grande e colorida
+
+## 🆘 Se ainda não aparecer a nota:
+
+Abra o Console (F12) e me envie o que aparecer em "Dados recebidos"

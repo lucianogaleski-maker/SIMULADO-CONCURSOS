@@ -31,7 +31,11 @@
       {% for h in historico %}
       <tr>
         <td>{{ h.concurso.nome }}</td>
-        <td><span class="badge bg-{% if h.nota_total >= 80 %}success{% elif h.nota_total >= 50 %}warning{% else %}danger{% endif %}">{{ h.nota_total }}%</span></td>
+        <td>
+          <span class="badge {% if h.nota_total >= 70 %}bg-success{% elif h.nota_total >= 50 %}bg-warning text-dark{% else %}bg-danger{% endif %} fs-6">
+            {{ h.nota_total }}%
+          </span>
+        </td>
         <td>{{ h.acertos }}/{{ h.total_questoes }}</td>
         <td>{{ h.data.strftime('%d/%m/%Y %H:%M') }}</td>
       </tr>

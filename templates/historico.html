@@ -12,7 +12,11 @@
       {% for r in registros %}
       <tr>
         <td>{{ r.concurso.nome }}</td>
-        <td><span class="badge bg-{% if r.nota_total >= 80 %}success{% elif r.nota_total >= 50 %}warning{% else %}danger{% endif %} fs-6">{{ r.nota_total }}%</span></td>
+        <td>
+          <span class="badge {% if r.nota_total >= 70 %}bg-success{% elif r.nota_total >= 50 %}bg-warning text-dark{% else %}bg-danger{% endif %} fs-6">
+            {{ r.nota_total }}%
+          </span>
+        </td>
         <td>{{ r.acertos }}/{{ r.total_questoes }}</td>
         <td>{{ (r.tempo_gasto // 60) }}min {{ (r.tempo_gasto % 60) }}s</td>
         <td>{{ r.data.strftime('%d/%m/%Y %H:%M') }}</td>

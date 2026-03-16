@@ -100,29 +100,52 @@ function confirmarEnvio() {
 }
 
 function exibirResultado(data) {
+  console.log('Dados recebidos:', data); // Debug
+  
   const minutos = Math.floor(data.tempo / 60);
   const segs = data.tempo % 60;
+  const nota = parseFloat(data.nota) || 0;
+  const acertos = parseInt(data.acertos) || 0;
+  const total = parseInt(data.total) || 0;
+  
+  // Definir cor baseada na nota
+  let corNota = 'danger';
+  if (nota >= 70) corNota = 'success';
+  else if (nota >= 50) corNota = 'warning';
+  
   let html = `
     <div class="text-center mb-4">
-      <div class="display-4 fw-bold text-${data.nivel_cls}">${data.nota}%</div>
-      <p class="fs-5">${data.acertos} de ${data.total} acertos</p>
-      <div class="alert alert-${data.nivel_cls}">${data.nivel_msg}</div>
-      <p class="text-muted"><i class="fas fa-clock me-1"></i>Tempo: ${minutos}min ${segs}s</p>
+      <div class="display-1 fw-bold" style="color: ${corNota === 'success' ? '#28a745' : corNota === 'warning' ? '#ffc107' : '#dc3545'}">
+        ${nota.toFixed(1)}%
+      </div>
+      <p class="fs-4 mt-3">${acertos} de ${total} acertos</p>
+      <div class="alert alert-${corNota} mt-3">
+        <strong>${data.nivel_msg || 'Simulado finalizado!'}</strong>
+      </div>
+      <p class="text-muted fs-5"><i class="fas fa-clock me-2"></i>Tempo: ${minutos}min ${segs}s</p>
     </div>
-    <h6 class="mb-3">Desempenho por Matéria:</h6>
-    <div class="row g-2">`;
-  for (const [mat, info] of Object.entries(data.por_materia)) {
+    <hr>
+    <h5 class="mb-3 text-center">📊 Desempenho por Matéria</h5>
+    <div class="row g-3">`;
+  
+  for (const [mat, info] of Object.entries(data.por_materia || {})) {
     const pct = Math.round((info.acertos / info.total) * 100);
-    const cor = pct >= 80 ? 'success' : pct >= 50 ? 'warning' : 'danger';
+    let cor = 'danger';
+    if (pct >= 70) cor = 'success';
+    else if (pct >= 50) cor = 'warning';
+    
     html += `
       <div class="col-md-6">
-        <div class="card border-${cor}">
-          <div class="card-body py-2">
-            <div class="d-flex justify-content-between">
-              <span>${mat}</span>
-              <span class="badge bg-${cor}">${info.acertos}/${info.total} (${pct}%)</span>
+        <div class="card border-${cor} shadow-sm">
+          <div class="card-body">
+            <div class="d-flex justify-content-between align-items-center mb-2">
+              <span class="fw-bold">${mat}</span>
+              <span class="badge bg-${cor} fs-6">${pct}%</span>
             </div>
-            <div class="progress mt-1" style="height:5px">
+            <div class="d-flex justify-content-between text-muted small mb-2">
+              <span>Acertos: ${info.acertos}/${info.total}</span>
+            </div>
+            <div class="progress" style="height:8px">
               <div class="progress-bar bg-${cor}" style="width:${pct}%"></div>
             </div>
           </div>
