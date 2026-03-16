@@ -426,12 +426,13 @@ def popular_banco():
 
 # Inicializar banco ao iniciar
 with app.app_context():
-    db.create_all()
+    db.create_all()  # Cria todas as tabelas automaticamente
     if Banca.query.count() == 0:
         try:
             popular_banco()
         except:
             pass
+    print("Banco de dados inicializado!")
 
 if __name__ == '__main__':
     app.run(debug=True)
