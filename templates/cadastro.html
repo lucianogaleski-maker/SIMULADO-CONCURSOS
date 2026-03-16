@@ -1,0 +1,30 @@
+{% extends "base.html" %}
+{% block title %}Cadastro{% endblock %}
+{% block content %}
+<div class="auth-card card shadow-lg">
+  <div class="card-body p-4">
+    <div class="text-center mb-4">
+      <i class="fas fa-user-plus fa-3x text-primary"></i>
+      <h3 class="mt-2 fw-bold">Criar Conta</h3>
+    </div>
+    {% if erro %}<div class="alert alert-danger">{{ erro }}</div>{% endif %}
+    <form method="POST">
+      <div class="mb-3">
+        <label class="form-label">Nome completo</label>
+        <input type="text" name="nome" class="form-control" required>
+      </div>
+      <div class="mb-3">
+        <label class="form-label">E-mail</label>
+        <input type="email" name="email" class="form-control" required>
+      </div>
+      <div class="mb-3">
+        <label class="form-label">Senha</label>
+        <input type="password" name="senha" class="form-control" minlength="6" required>
+      </div>
+      <button type="submit" class="btn btn-primary w-100">Cadastrar</button>
+    </form>
+    <hr>
+    <p class="text-center mb-0">Já tem conta? <a href="{{ url_for('login') }}">Entrar</a></p>
+  </div>
+</div>
+{% endblock %}

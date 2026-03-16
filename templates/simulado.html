@@ -1,0 +1,137 @@
+{% extends "base.html" %}
+{% block title %}Simulado - {{ concurso.nome }}{% endblock %}
+{% block content %}
+<div class="d-flex justify-content-between align-items-center mb-3 flex-wrap gap-2">
+  <h5 class="mb-0"><i class="fas fa-file-alt me-2"></i>{{ concurso.nome }}</h5>
+  <div class="d-flex align-items-center gap-3">
+    <span class="badge bg-secondary fs-6"><i class="fas fa-clock me-1"></i><span id="timer">00:00:00</span></span>
+    <span class="badge bg-primary">{{ total }} questões</span>
+  </div>
+</div>
+
+<div class="progress mb-4" style="height:8px">
+  <div class="progress-bar" id="progressBar" style="width:0%"></div>
+</div>
+
+<form id="formSimulado">
+  {% for q in questoes %}
+  <div class="card mb-3 questao-card" id="q{{ loop.index }}">
+    <div class="card-body">
+      <div class="d-flex justify-content-between mb-2">
+        <span class="badge bg-secondary">{{ q.materia }}</span>
+        <span class="text-muted small">Questão {{ loop.index }}/{{ total }}</span>
+      </div>
+      <p class="fw-semibold">{{ loop.index }}. {{ q.enunciado }}</p>
+      {% for letra, texto in q.alternativas.items() %}
+      <div class="form-check alternativa-item" onclick="selecionarAlternativa(this, '{{ q.id }}', '{{ letra }}')">
+        <input class="form-check-input" type="radio" name="q{{ q.id }}" value="{{ letra }}" id="q{{ q.id }}{{ letra }}">
+        <label class="form-check-label w-100" for="q{{ q.id }}{{ letra }}">
+          <strong>{{ letra }})</strong> {{ texto }}
+        </label>
+      </div>
+      {% endfor %}
+    </div>
+  </div>
+  {% endfor %}
+
+  <div class="text-center my-4">
+    <button type="button" class="btn btn-success btn-lg px-5" onclick="confirmarEnvio()">
+      <i class="fas fa-check-circle me-2"></i>Finalizar Simulado
+    </button>
+  </div>
+</form>
+
+<!-- Modal Resultado -->
+<div class="modal fade" id="modalResultado" tabindex="-1" data-bs-backdrop="static">
+  <div class="modal-dialog modal-lg modal-dialog-scrollable">
+    <div class="modal-content">
+      <div class="modal-header bg-primary text-white">
+        <h5 class="modal-title"><i class="fas fa-trophy me-2"></i>Resultado Final</h5>
+      </div>
+      <div class="modal-body" id="conteudoResultado"></div>
+      <div class="modal-footer">
+        <a href="{{ url_for('dashboard') }}" class="btn btn-primary">Voltar ao Início</a>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+const totalQuestoes = {{ total }};
+let respostas = {};
+let segundos = 0;
+let timerInterval = setInterval(() => {
+  segundos++;
+  const h = String(Math.floor(segundos/3600)).padStart(2,'0');
+  const m = String(Math.floor((segundos%3600)/60)).padStart(2,'0');
+  const s = String(segundos%60).padStart(2,'0');
+  document.getElementById('timer').textContent = `${h}:${m}:${s}`;
+}, 1000);
+
+function selecionarAlternativa(el, qid, letra) {
+  const card = el.closest('.questao-card');
+  card.querySelectorAll('.alternativa-item').forEach(a => a.classList.remove('selecionada'));
+  el.classList.add('selecionada');
+  el.querySelector('input').checked = true;
+  respostas[qid] = letra;
+  atualizarProgresso();
+}
+
+function atualizarProgresso() {
+  const pct = (Object.keys(respostas).length / totalQuestoes) * 100;
+  document.getElementById('progressBar').style.width = pct + '%';
+}
+
+function confirmarEnvio() {
+  const naoRespondidas = totalQuestoes - Object.keys(respostas).length;
+  if (naoRespondidas > 0) {
+    if (!confirm(`Você deixou ${naoRespondidas} questão(ões) sem resposta. Deseja finalizar mesmo assim?`)) return;
+  }
+  clearInterval(timerInterval);
+  fetch('/finalizar', {
+    method: 'POST',
+    headers: {'Content-Type': 'application/json'},
+    body: JSON.stringify({respostas, tempo: segundos})
+  })
+  .then(r => r.json())
+  .then(data => exibirResultado(data));
+}
+
+function exibirResultado(data) {
+  const minutos = Math.floor(data.tempo / 60);
+  const segs = data.tempo % 60;
+  let html = `
+    <div class="text-center mb-4">
+      <div class="display-4 fw-bold text-${data.nivel_cls}">${data.nota}%</div>
+      <p class="fs-5">${data.acertos} de ${data.total} acertos</p>
+      <div class="alert alert-${data.nivel_cls}">${data.nivel_msg}</div>
+      <p class="text-muted"><i class="fas fa-clock me-1"></i>Tempo: ${minutos}min ${segs}s</p>
+    </div>
+    <h6 class="mb-3">Desempenho por Matéria:</h6>
+    <div class="row g-2">`;
+  for (const [mat, info] of Object.entries(data.por_materia)) {
+    const pct = Math.round((info.acertos / info.total) * 100);
+    const cor = pct >= 80 ? 'success' : pct >= 50 ? 'warning' : 'danger';
+    html += `
+      <div class="col-md-6">
+        <div class="card border-${cor}">
+          <div class="card-body py-2">
+            <div class="d-flex justify-content-between">
+              <span>${mat}</span>
+              <span class="badge bg-${cor}">${info.acertos}/${info.total} (${pct}%)</span>
+            </div>
+            <div class="progress mt-1" style="height:5px">
+              <div class="progress-bar bg-${cor}" style="width:${pct}%"></div>
+            </div>
+          </div>
+        </div>
+      </div>`;
+  }
+  html += '</div>';
+  document.getElementById('conteudoResultado').innerHTML = html;
+  new bootstrap.Modal(document.getElementById('modalResultado')).show();
+}
+</script>
+{% endblock %}

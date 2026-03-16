@@ -1,0 +1,146 @@
+{
+  "bancas": [
+    {
+      "nome": "CEBRASPE",
+      "concursos": [
+        {
+          "nome": "Polícia Federal 2024",
+          "orgao": "Polícia Federal",
+          "materias": [
+            {
+              "nome": "Português",
+              "questoes": [
+                {"enunciado": "Assinale a alternativa em que todas as palavras estão grafadas corretamente.", "alternativas": ["Exceção, excesso, acesso", "Excessão, excesso, acesso", "Exceção, excesso, axesso", "Excessão, excesso, axesso", "Exceção, excessso, acesso"], "correta": "Exceção, excesso, acesso"},
+                {"enunciado": "Qual figura de linguagem está presente em 'O silêncio falou mais alto'?", "alternativas": ["Metáfora", "Metonímia", "Hipérbole", "Antítese", "Paradoxo"], "correta": "Paradoxo"},
+                {"enunciado": "Em 'Ele chegou cedo, mas saiu tarde', a conjunção destacada indica:", "alternativas": ["Adição", "Adversidade", "Conclusão", "Explicação", "Alternância"], "correta": "Adversidade"},
+                {"enunciado": "Assinale a frase com uso correto da crase:", "alternativas": ["Fui à Paris.", "Refiro-me à isso.", "Vou à escola.", "Ele foi à pé.", "Ela chegou à pouco."], "correta": "Vou à escola."},
+                {"enunciado": "Qual é o sujeito da oração 'Choveu muito ontem'?", "alternativas": ["Muito", "Ontem", "Choveu", "Sujeito indeterminado", "Sujeito inexistente"], "correta": "Sujeito inexistente"},
+                {"enunciado": "A palavra 'farmácia' é classificada quanto à tonicidade como:", "alternativas": ["Oxítona", "Paroxítona", "Proparoxítona", "Monossílaba tônica", "Átona"], "correta": "Proparoxítona"},
+                {"enunciado": "Indique a alternativa com erro de concordância verbal:", "alternativas": ["Os alunos estudaram.", "Faz dois anos que não o vejo.", "Haviam muitas pessoas.", "Ele e eu fomos juntos.", "As crianças brincaram."], "correta": "Haviam muitas pessoas."},
+                {"enunciado": "O prefixo que indica negação em 'ilegal' é:", "alternativas": ["il-", "i-", "le-", "al-", "in-"], "correta": "il-"},
+                {"enunciado": "Qual alternativa apresenta uma oração subordinada adverbial causal?", "alternativas": ["Quando chegar, avise.", "Porque estudou, passou.", "Para passar, estude.", "Embora cansado, foi.", "Se chover, fica."], "correta": "Porque estudou, passou."},
+                {"enunciado": "Assinale o antônimo de 'prolixo':", "alternativas": ["Extenso", "Verboso", "Conciso", "Detalhado", "Redundante"], "correta": "Conciso"},
+                {"enunciado": "Em qual alternativa há uso correto do porquê?", "alternativas": ["Por que você foi?", "Não sei porque foi.", "O porque da questão.", "Fui, porque queria.", "Porque, ele saiu."], "correta": "Por que você foi?"},
+                {"enunciado": "Qual é a função sintática de 'rapidamente' em 'Ele correu rapidamente'?", "alternativas": ["Adjunto adnominal", "Adjunto adverbial", "Predicativo", "Objeto direto", "Aposto"], "correta": "Adjunto adverbial"},
+                {"enunciado": "A norma culta exige o uso de 'mim' ou 'eu' em: 'Isso é para ___'.", "alternativas": ["eu", "mim", "mi", "I", "Ambos corretos"], "correta": "mim"},
+                {"enunciado": "Qual alternativa contém uma metáfora?", "alternativas": ["Ele é forte como um touro.", "A vida é uma viagem.", "Ele comeu muito.", "O vento soprou.", "Ela sorriu."], "correta": "A vida é uma viagem."},
+                {"enunciado": "Assinale a alternativa em que o acento grave indica crase obrigatória:", "alternativas": ["Vou à tarde.", "Refiro-me à ela.", "Fui à João.", "Cheguei à tempo.", "Vou à praia."], "correta": "Vou à praia."}
+              ]
+            },
+            {
+              "nome": "Matemática",
+              "questoes": [
+                {"enunciado": "Qual é o resultado de 2³ + 3²?", "alternativas": ["15", "17", "13", "19", "21"], "correta": "17"},
+                {"enunciado": "Se x + 5 = 12, então x é igual a:", "alternativas": ["5", "6", "7", "8", "9"], "correta": "7"},
+                {"enunciado": "Qual é a área de um quadrado com lado 6 cm?", "alternativas": ["24 cm²", "36 cm²", "12 cm²", "48 cm²", "30 cm²"], "correta": "36 cm²"},
+                {"enunciado": "Quantos % de 200 é 50?", "alternativas": ["10%", "20%", "25%", "30%", "15%"], "correta": "25%"},
+                {"enunciado": "A raiz quadrada de 144 é:", "alternativas": ["11", "12", "13", "14", "10"], "correta": "12"},
+                {"enunciado": "Qual é o MMC de 4 e 6?", "alternativas": ["8", "10", "12", "24", "6"], "correta": "12"},
+                {"enunciado": "Um triângulo tem ângulos de 60°, 80° e:", "alternativas": ["30°", "40°", "50°", "60°", "70°"], "correta": "40°"},
+                {"enunciado": "Se um produto custa R$80 e tem 15% de desconto, o preço final é:", "alternativas": ["R$65", "R$68", "R$70", "R$72", "R$75"], "correta": "R$68"},
+                {"enunciado": "Qual é o valor de log₁₀(1000)?", "alternativas": ["2", "3", "4", "10", "100"], "correta": "3"},
+                {"enunciado": "A soma dos ângulos internos de um pentágono é:", "alternativas": ["360°", "450°", "540°", "720°", "900°"], "correta": "540°"},
+                {"enunciado": "Qual é o resultado de 5! (fatorial de 5)?", "alternativas": ["20", "60", "100", "120", "150"], "correta": "120"},
+                {"enunciado": "Em uma PA com a1=2 e r=3, o 5º termo é:", "alternativas": ["12", "13", "14", "15", "17"], "correta": "14"},
+                {"enunciado": "Qual é a probabilidade de tirar cara em uma moeda?", "alternativas": ["1/4", "1/3", "1/2", "2/3", "3/4"], "correta": "1/2"},
+                {"enunciado": "O perímetro de um retângulo 5x3 é:", "alternativas": ["15", "16", "17", "18", "20"], "correta": "16"},
+                {"enunciado": "Qual é o MDC de 12 e 18?", "alternativas": ["3", "4", "6", "9", "12"], "correta": "6"}
+              ]
+            },
+            {
+              "nome": "Direito Constitucional",
+              "questoes": [
+                {"enunciado": "Qual é o fundamento da República Federativa do Brasil previsto na CF/88?", "alternativas": ["Soberania", "Dignidade da pessoa humana", "Cidadania", "Valores sociais do trabalho", "Todas as anteriores"], "correta": "Todas as anteriores"},
+                {"enunciado": "O Brasil adota qual forma de governo?", "alternativas": ["Monarquia", "República", "Oligarquia", "Teocracia", "Anarquia"], "correta": "República"},
+                {"enunciado": "Quantos artigos tem a Constituição Federal de 1988 no texto original?", "alternativas": ["200", "230", "245", "250", "260"], "correta": "245"},
+                {"enunciado": "O habeas corpus protege o direito de:", "alternativas": ["Propriedade", "Locomoção", "Expressão", "Voto", "Privacidade"], "correta": "Locomoção"},
+                {"enunciado": "O mandado de segurança protege direito:", "alternativas": ["Coletivo apenas", "Individual apenas", "Líquido e certo", "Difuso", "Penal"], "correta": "Líquido e certo"},
+                {"enunciado": "A CF/88 é classificada quanto à origem como:", "alternativas": ["Outorgada", "Promulgada", "Cesarista", "Pactuada", "Imposta"], "correta": "Promulgada"},
+                {"enunciado": "Qual poder tem função típica de legislar?", "alternativas": ["Executivo", "Judiciário", "Legislativo", "Ministério Público", "TCU"], "correta": "Legislativo"},
+                {"enunciado": "A idade mínima para ser Presidente da República é:", "alternativas": ["18 anos", "21 anos", "30 anos", "35 anos", "40 anos"], "correta": "35 anos"},
+                {"enunciado": "O STF é composto por quantos ministros?", "alternativas": ["9", "10", "11", "13", "15"], "correta": "11"},
+                {"enunciado": "Qual cláusula pétrea está prevista na CF/88?", "alternativas": ["Reeleição", "Voto direto", "Pena de morte", "Censura", "Monopólio estatal"], "correta": "Voto direto"},
+                {"enunciado": "O prazo do mandato presidencial é de:", "alternativas": ["2 anos", "3 anos", "4 anos", "5 anos", "6 anos"], "correta": "4 anos"},
+                {"enunciado": "O princípio da legalidade significa:", "alternativas": ["Fazer o que a lei proíbe", "Fazer apenas o que a lei permite (adm.)", "Ignorar a lei", "Criar leis", "Julgar leis"], "correta": "Fazer apenas o que a lei permite (adm.)"},
+                {"enunciado": "O controle difuso de constitucionalidade pode ser exercido por:", "alternativas": ["Apenas o STF", "Apenas o STJ", "Qualquer juiz ou tribunal", "Apenas o Senado", "Apenas o Executivo"], "correta": "Qualquer juiz ou tribunal"},
+                {"enunciado": "A ação popular pode ser proposta por:", "alternativas": ["Qualquer pessoa", "Qualquer cidadão", "Apenas advogados", "Apenas o MP", "Apenas servidores"], "correta": "Qualquer cidadão"},
+                {"enunciado": "O princípio da impessoalidade na administração pública significa:", "alternativas": ["Agir com pessoalidade", "Não fazer distinções indevidas", "Favorecer aliados", "Punir inimigos", "Agir com parcialidade"], "correta": "Não fazer distinções indevidas"}
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "nome": "FGV",
+      "concursos": [
+        {
+          "nome": "Banco do Brasil 2024",
+          "orgao": "Banco do Brasil",
+          "materias": [
+            {
+              "nome": "Matemática Financeira",
+              "questoes": [
+                {"enunciado": "Um capital de R$1.000 aplicado a 10% a.a. em juros simples por 2 anos rende:", "alternativas": ["R$100", "R$150", "R$200", "R$210", "R$250"], "correta": "R$200"},
+                {"enunciado": "A taxa de 12% a.a. equivale em juros simples a quanto ao mês?", "alternativas": ["0,5%", "1%", "1,5%", "2%", "2,5%"], "correta": "1%"},
+                {"enunciado": "Qual é o montante de R$500 a 5% a.m. por 3 meses em juros simples?", "alternativas": ["R$550", "R$565", "R$575", "R$580", "R$600"], "correta": "R$575"},
+                {"enunciado": "Em juros compostos, R$1.000 a 10% a.a. por 2 anos resulta em:", "alternativas": ["R$1.200", "R$1.210", "R$1.220", "R$1.100", "R$1.150"], "correta": "R$1.210"},
+                {"enunciado": "O desconto comercial de R$500 a 5% é:", "alternativas": ["R$20", "R$25", "R$30", "R$35", "R$40"], "correta": "R$25"},
+                {"enunciado": "Uma prestação de R$200/mês por 12 meses a 0% totaliza:", "alternativas": ["R$1.200", "R$2.000", "R$2.400", "R$2.800", "R$3.000"], "correta": "R$2.400"},
+                {"enunciado": "Taxa nominal de 24% a.a. com capitalização mensal equivale a:", "alternativas": ["1% a.m.", "2% a.m.", "3% a.m.", "4% a.m.", "6% a.m."], "correta": "2% a.m."},
+                {"enunciado": "O valor presente de R$1.100 daqui a 1 ano a 10% a.a. é:", "alternativas": ["R$900", "R$950", "R$1.000", "R$1.050", "R$1.100"], "correta": "R$1.000"},
+                {"enunciado": "Inflação de 10% seguida de 10% resulta em inflação acumulada de:", "alternativas": ["20%", "21%", "22%", "19%", "18%"], "correta": "21%"},
+                {"enunciado": "Se a taxa real é 5% e a inflação é 10%, a taxa nominal é aproximadamente:", "alternativas": ["15%", "15,5%", "14,5%", "16%", "14%"], "correta": "15,5%"},
+                {"enunciado": "Amortização constante (SAC): a prestação ao longo do tempo é:", "alternativas": ["Crescente", "Constante", "Decrescente", "Variável", "Nula"], "correta": "Decrescente"},
+                {"enunciado": "No sistema Price, as prestações são:", "alternativas": ["Crescentes", "Decrescentes", "Constantes", "Variáveis", "Nulas"], "correta": "Constantes"},
+                {"enunciado": "R$2.000 a 5% a.m. por 1 mês em juros simples rende:", "alternativas": ["R$50", "R$100", "R$150", "R$200", "R$250"], "correta": "R$100"},
+                {"enunciado": "O conceito de 'payback' refere-se a:", "alternativas": ["Lucro do investimento", "Tempo de retorno do investimento", "Taxa de juros", "Valor presente", "Amortização"], "correta": "Tempo de retorno do investimento"},
+                {"enunciado": "TIR significa:", "alternativas": ["Taxa de Inflação Real", "Taxa Interna de Retorno", "Taxa de Investimento Relativo", "Tempo de Investimento Rentável", "Taxa de Imposto de Renda"], "correta": "Taxa Interna de Retorno"}
+              ]
+            },
+            {
+              "nome": "Conhecimentos Bancários",
+              "questoes": [
+                {"enunciado": "O Banco Central do Brasil é responsável por:", "alternativas": ["Emitir moeda", "Fiscalizar bancos", "Controlar a inflação", "Definir a Selic", "Todas as anteriores"], "correta": "Todas as anteriores"},
+                {"enunciado": "O que é CDB?", "alternativas": ["Certificado de Depósito Bancário", "Conta de Depósito Básico", "Crédito Direto ao Banco", "Cartão de Débito Bancário", "Contrato de Débito Bancário"], "correta": "Certificado de Depósito Bancário"},
+                {"enunciado": "A taxa SELIC é definida pelo:", "alternativas": ["Congresso Nacional", "Presidente da República", "COPOM", "STF", "Ministério da Fazenda"], "correta": "COPOM"},
+                {"enunciado": "O FGC garante depósitos até:", "alternativas": ["R$100.000", "R$150.000", "R$200.000", "R$250.000", "R$500.000"], "correta": "R$250.000"},
+                {"enunciado": "LCI é um título vinculado ao setor:", "alternativas": ["Industrial", "Imobiliário", "Agrícola", "Comercial", "Tecnológico"], "correta": "Imobiliário"},
+                {"enunciado": "O que é spread bancário?", "alternativas": ["Taxa de câmbio", "Diferença entre taxa de captação e empréstimo", "Taxa de inflação", "Lucro líquido", "Imposto bancário"], "correta": "Diferença entre taxa de captação e empréstimo"},
+                {"enunciado": "Qual é a função do BACEN?", "alternativas": ["Legislar sobre bancos", "Regular e fiscalizar o sistema financeiro", "Julgar crimes financeiros", "Arrecadar impostos", "Emitir títulos públicos"], "correta": "Regular e fiscalizar o sistema financeiro"},
+                {"enunciado": "O que é uma conta corrente?", "alternativas": ["Conta de investimento", "Conta para movimentação diária", "Conta de poupança", "Conta de previdência", "Conta empresarial"], "correta": "Conta para movimentação diária"},
+                {"enunciado": "PIX é um sistema de:", "alternativas": ["Crédito parcelado", "Pagamentos instantâneos", "Investimento", "Câmbio", "Seguros"], "correta": "Pagamentos instantâneos"},
+                {"enunciado": "O que é inadimplência?", "alternativas": ["Pagamento em dia", "Não cumprimento de obrigação financeira", "Investimento de risco", "Taxa de juros alta", "Inflação elevada"], "correta": "Não cumprimento de obrigação financeira"},
+                {"enunciado": "Qual órgão regula o mercado de capitais no Brasil?", "alternativas": ["BACEN", "CVM", "SUSEP", "PREVIC", "STN"], "correta": "CVM"},
+                {"enunciado": "O que é liquidez?", "alternativas": ["Lucro de um ativo", "Facilidade de converter ativo em dinheiro", "Taxa de juros", "Risco de crédito", "Inflação"], "correta": "Facilidade de converter ativo em dinheiro"},
+                {"enunciado": "Tesouro Direto é um programa de venda de:", "alternativas": ["Ações", "Títulos públicos federais", "CDBs", "Fundos de investimento", "Debêntures"], "correta": "Títulos públicos federais"},
+                {"enunciado": "O que é cheque especial?", "alternativas": ["Cheque de alto valor", "Crédito pré-aprovado na conta corrente", "Cheque sem fundo", "Cheque administrativo", "Cheque visado"], "correta": "Crédito pré-aprovado na conta corrente"},
+                {"enunciado": "Qual é a principal função de um banco comercial?", "alternativas": ["Emitir moeda", "Captar depósitos e conceder crédito", "Regular o mercado", "Fiscalizar empresas", "Gerir fundos públicos"], "correta": "Captar depósitos e conceder crédito"}
+              ]
+            },
+            {
+              "nome": "Português",
+              "questoes": [
+                {"enunciado": "Qual a classe gramatical de 'rapidamente'?", "alternativas": ["Adjetivo", "Advérbio", "Substantivo", "Verbo", "Preposição"], "correta": "Advérbio"},
+                {"enunciado": "Assinale a alternativa com erro ortográfico:", "alternativas": ["Beneficente", "Consciência", "Excessão", "Exceção", "Acesso"], "correta": "Excessão"},
+                {"enunciado": "O plural de 'cidadão' é:", "alternativas": ["Cidadãos", "Cidadões", "Cidadães", "Cidadãos ou cidadões", "Cidadões ou cidadães"], "correta": "Cidadãos"},
+                {"enunciado": "Qual é o sinônimo de 'efêmero'?", "alternativas": ["Eterno", "Passageiro", "Sólido", "Permanente", "Duradouro"], "correta": "Passageiro"},
+                {"enunciado": "Em 'O livro foi lido por ela', o sujeito é:", "alternativas": ["O livro (agente)", "O livro (paciente)", "Ela (paciente)", "Ela (agente)", "Sujeito oculto"], "correta": "O livro (paciente)"},
+                {"enunciado": "Qual é a forma verbal no futuro do pretérito de 'fazer'?", "alternativas": ["Fiz", "Farei", "Faria", "Faça", "Fizesse"], "correta": "Faria"},
+                {"enunciado": "A vírgula está corretamente empregada em:", "alternativas": ["O aluno, estudou muito.", "Estudou, e passou.", "João, o melhor aluno, passou.", "Ele foi, embora.", "Comprei, pão e leite."], "correta": "João, o melhor aluno, passou."},
+                {"enunciado": "Qual é o objeto direto em 'Ela comprou flores'?", "alternativas": ["Ela", "Comprou", "Flores", "Não há objeto", "Objeto indireto"], "correta": "Flores"},
+                {"enunciado": "O prefixo 'des-' em 'deslealdade' indica:", "alternativas": ["Intensidade", "Negação/oposição", "Repetição", "Excesso", "Lugar"], "correta": "Negação/oposição"},
+                {"enunciado": "Assinale a frase no discurso indireto correto: 'Ele disse: Vou sair.'", "alternativas": ["Ele disse que vai sair.", "Ele disse que iria sair.", "Ele disse que sairia.", "Ele disse que saiu.", "Ele disse que saia."], "correta": "Ele disse que iria sair."},
+                {"enunciado": "Qual é o antônimo de 'austero'?", "alternativas": ["Rígido", "Severo", "Indulgente", "Rigoroso", "Inflexível"], "correta": "Indulgente"},
+                {"enunciado": "A oração 'Para que você estude' é subordinada adverbial:", "alternativas": ["Causal", "Concessiva", "Final", "Consecutiva", "Condicional"], "correta": "Final"},
+                {"enunciado": "Qual é o grau superlativo absoluto sintético de 'bom'?", "alternativas": ["Muito bom", "Boníssimo", "Ótimo", "Melhor", "Bom demais"], "correta": "Ótimo"},
+                {"enunciado": "Em 'Que livro interessante!', a oração é:", "alternativas": ["Declarativa", "Interrogativa", "Exclamativa", "Imperativa", "Dubitativa"], "correta": "Exclamativa"},
+                {"enunciado": "Assinale a alternativa com uso correto de 'mal' ou 'mau':", "alternativas": ["Ele é mal aluno.", "Ele está mau.", "Ele é mau aluno.", "Ele está mal-humorado.", "Ele fez mau."], "correta": "Ele está mal-humorado."}
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}
