@@ -403,13 +403,17 @@ def relatorio_admin():
         
         print(f"Relatório: {total_usuarios} usuários, {total_acessos} acessos, {total_simulados} simulados")
         
+        # Data atual para o relatório
+        data_atual = datetime.utcnow().strftime('%d/%m/%Y às %H:%M')
+        
         return render_template('relatorio_admin.html',
                              total_usuarios=total_usuarios,
                              total_acessos=total_acessos,
                              total_simulados=total_simulados,
                              usuarios=usuarios,
                              acessos_semana=acessos_semana,
-                             simulados_por_concurso=simulados_por_concurso)
+                             simulados_por_concurso=simulados_por_concurso,
+                             data_atual=data_atual)
     except Exception as e:
         print(f"ERRO no relatório admin: {e}")
         import traceback
