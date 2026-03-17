@@ -368,38 +368,53 @@ def historico():
 @app.route('/relatorio-admin')
 @admin_required
 def relatorio_admin():
-    # Estatísticas gerais
-    total_usuarios = Usuario.query.count()
-    total_acessos = Acesso.query.count()
-    total_simulados = Desempenho.query.count()
-    
-    # Usuários cadastrados
-    usuarios = Usuario.query.order_by(Usuario.criado_em.desc()).all()
-    
-    # Acessos por dia (últimos 7 dias)
-    from datetime import timedelta
-    hoje = datetime.utcnow().date()
-    acessos_semana = []
-    for i in range(7):
-        dia = hoje - timedelta(days=i)
-        count = Acesso.query.filter(
-            db.func.date(Acesso.data) == dia
-        ).count()
-        acessos_semana.append({'dia': dia.strftime('%d/%m'), 'total': count})
-    acessos_semana.reverse()
-    
-    # Simulados por concurso
-    simulados_por_concurso = db.session.query(
-        Concurso.nome, db.func.count(Desempenho.id)
-    ).join(Desempenho).group_by(Concurso.nome).all()
-    
-    return render_template('relatorio_admin.html',
-                         total_usuarios=total_usuarios,
-                         total_acessos=total_acessos,
-                         total_simulados=total_simulados,
-                         usuarios=usuarios,
-                         acessos_semana=acessos_semana,
-                         simulados_por_concurso=simulados_por_concurso)
+    try:
+        # Estatísticas gerais
+        total_usuarios = Usuario.query.count()
+        total_acessos = Acesso.query.count()
+        total_simulados = Desempenho.query.count()
+        
+        # Usuários cadastrados (com proteção para criado_em NULL)
+        usuarios = Usuario.query.order_by(Usuario.id.desc()).all()
+        
+        # Acessos por dia (últimos 7 dias)
+        from datetime import timedelta
+        hoje = datetime.utcnow().date()
+        acessos_semana = []
+        for i in range(7):
+            dia = hoje - timedelta(days=i)
+            try:
+                count = Acesso.query.filter(
+                    db.func.date(Acesso.data) == dia
+                ).count()
+            except:
+                count = 0
+            acessos_semana.append({'dia': dia.strftime('%d/%m'), 'total': count})
+        acessos_semana.reverse()
+        
+        # Simulados por concurso (com proteção)
+        try:
+            simulados_por_concurso = db.session.query(
+                Concurso.nome, db.func.count(Desempenho.id)
+            ).join(Desempenho, Desempenho.concurso_id == Concurso.id)\
+            .group_by(Concurso.nome).all()
+        except:
+            simulados_por_concurso = []
+        
+        print(f"Relatório: {total_usuarios} usuários, {total_acessos} acessos, {total_simulados} simulados")
+        
+        return render_template('relatorio_admin.html',
+                             total_usuarios=total_usuarios,
+                             total_acessos=total_acessos,
+                             total_simulados=total_simulados,
+                             usuarios=usuarios,
+                             acessos_semana=acessos_semana,
+                             simulados_por_concurso=simulados_por_concurso)
+    except Exception as e:
+        print(f"ERRO no relatório admin: {e}")
+        import traceback
+        traceback.print_exc()
+        return f"<h1>Erro ao carregar relatório</h1><p>{str(e)}</p><a href='/dashboard'>Voltar</a>", 500
 
 @app.route('/login-admin', methods=['GET', 'POST'])
 def login_admin():
